@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calendar with Weight Tracker</title>
+<style>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    th, td {
+        border: 1px solid black;
+        padding: 10px;
+        text-align: center;
+        cursor: pointer;
+    }
+    th {
+        background-color: #f2f2f2;
+    }
+    #weightInputs {
+        display: none;
+    }
+    #calculator {
+        margin-top: 20px;
+    }
+    #monthSelect, #yearSelect {
+        margin-bottom: 10px;
+    }
+</style>
+</head>
+<body>
+    <h2>Calendar with Weight Tracker</h2>
+    
+    <!-- Month selection -->
+    <select id="monthSelect" onchange="changeMonth()">
+        <option value="0">January</option>
+        <option value="1">February</option>
+        <option value="2">March</option>
+        <option value="3">April</option>
+        <option value="4">May</option>
+        <option value="5">June</option>
+        <option value="6">July</option>
+        <option value="7">August</option>
+        <option value="8">September</option>
+        <option value="9">October</option>
+        <option value="10">November</option>
+        <option value="11">December</option>
+    </select>
+    
+    <!-- Year selection -->
+    <select id="yearSelect" onchange="changeYear()">
+        <option value="2022">2022</option>
+        <option value="2023">2023</option>
+        <option value="2024">2024</option>
+        <!-- Add more options as needed -->
+    </select>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Mon</th>
+                <th>Tue</th>
+                <th>Wed</th>
+                <th>Thu</th>
+                <th>Fri</th>
+                <th>Sat</th>
+                <th>Sun</th>
+            </tr>
+        </thead>
+        <tbody id="calendar">
+            <!-- Calendar cells will be generated here -->
+        </tbody>
+    </table>
+
+    <div id="weightInputs">
+        <h3>Weight Input for <span id="selectedDate"></span></h3>
+        <label for="weightGained">Weight Gained:</label>
+        <input type="number" id="weightGained" min="0">
+        <span>lbs</span>
+        <br>
+        <label for="weightLoss">Weight Loss:</label>
+        <input type="number" id="weightLoss" min="0">
+        <span>lbs</span>
+        <br>
+        <button onclick="saveWeight()">Save</button>
+    </div>
+
+    <div id="calculator">
+        <h3>Weight Calculator</h3>
+        <label for="startDate">Start Date:</label>
+        <input type="date" id="startDate">
+        <br>
+        <label for="endDate">End Date:</label>
+        <input type="date" id="endDate">
+        <button onclick="calculateWeight()">Calculate</button>
+        <p>Total Weight Gained: <span id="totalGained"></span> lbs</p>
+        <p>Total Weight Loss: <span id="totalLoss"></span> lbs</p>
+    </div>
+
+    <script>
+        // Object to store weight data for each date
+        const weightData = {};
+
+        // Function to generate the calendar
+        function generateCalendar(month, year) {
+            const calendarBody = document.getElementById('calendar');
+            const firstDayOfMonth = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            
+            let date = 1;
+            let calendarHTML = '';
+
+            for (let i = 0; i < 6; i++) { // 6 rows for max 6 weeks
+                calendarHTML += '<tr>';
+                for (let j = 0; j < 7; j++) { // 7 columns for days of the week
+                    if (i === 0 && j < firstDayOfMonth) {
+                        calendarHTML += '<td></td>'; // Blank cells before the first day of the month
+                    } else if (date > daysInMonth) {
+                        calendarHTML += '<td></td>'; // Blank cells after the last day of the month
+                    } else {
+                        const currentDate = `${year}-${month + 1}-${date}`;
+                        calendarHTML += `<td onclick="showWeightInput('${currentDate}')">${date}</td>`;
+                        // Initialize weight data for each date
+                        weightData[currentDate] = { weightGained: 0, weightLoss: 0 };
+                        date++;
+                    }
+                }
+                calendarHTML += '</tr>';
+            }
+
+            calendarBody.innerHTML = calendarHTML;
+        }
+
+        // Function to change the month
+        function changeMonth() {
+            const selectedMonth = document.getElementById('monthSelect').value;
+            const selectedYear = document.getElementById('yearSelect').value;
+                       generateCalendar(parseInt(selectedMonth), parseInt(selectedYear));
+        }
+
+        // Function to change the year
+        function changeYear() {
+            const selectedMonth = document.getElementById('monthSelect').value;
+            const selectedYear = document.getElementById('yearSelect').value;
+            generateCalendar(parseInt(selectedMonth), parseInt(selectedYear));
+        }
+
+        // Show weight input fields for the selected date
+        function showWeightInput(date) {
+            document.getElementById('selectedDate').textContent = date;
+            document.getElementById('weightGained').value = weightData[date].weightGained;
+            document.getElementById('weightLoss').value = weightData[date].weightLoss;
+            document.getElementById('weightInputs').style.display = 'block';
+        }
+
+        // Save weight gained and weight loss for the selected date
+        function saveWeight() {
+            const date = document.getElementById('selectedDate').textContent;
+            const weightGained = parseFloat(document.getElementById('weightGained').value) || 0;
+            const weightLoss = parseFloat(document.getElementById('weightLoss').value) || 0;
+
+            // Update weight data
+            weightData[date].weightGained = weightGained;
+            weightData[date].weightLoss = weightLoss;
+
+            // Here you can process and store the weight data as needed
+            console.log(`Date: ${date}, Weight Gained: ${weightGained} lbs, Weight Loss: ${weightLoss} lbs`);
+
+            // Clear input fields and hide them
+            document.getElementById('weightGained').value = '';
+            document.getElementById('weightLoss').value = '';
+            document.getElementById('weightInputs').style.display = 'none';
+        }
+
+        // Function to calculate total weight gained and weight loss between two dates
+        function calculateWeight() {
+            const startDate = new Date(document.getElementById('startDate').value);
+            const endDate = new Date(document.getElementById('endDate').value);
+            let totalGained = 0;
+            let totalLoss = 0;
+
+            // Loop through dates and sum up weight gained and weight loss
+            for (let date in weightData) {
+                const currentDate = new Date(date);
+                if (currentDate >= startDate && currentDate <= endDate) {
+                    totalGained += weightData[date].weightGained;
+                    totalLoss += weightData[date].weightLoss;
+                }
+            }
+
+            // Display the results
+            document.getElementById('totalGained').textContent = totalGained.toFixed(2);
+            document.getElementById('totalLoss').textContent = totalLoss.toFixed(2);
+        }
+
+        // Call the function to generate the calendar for the current month and year
+        const today = new Date();
+        generateCalendar(today.getMonth(), today.getFullYear());
+    </script>
+
+</body></html>
+
+           

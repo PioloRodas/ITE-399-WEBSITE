@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weight Change Calculator</title>
+    <style>
+
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+
+    #container {
+        width: 500px;
+    margin: 50px auto;
+    margin-top: 10px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 0px 20px 1px rgba(0,0,0,0.1);
+    background-color: #DDDDDD;
+    text-align: left;
+    }
+
+    </style>
+</head>
+<body>
+    <div id="container">
+        <h2>Weight Change Calculator</h2>
+        <div id="calculator">
+            <form id="weightForm">
+                <label for="currentWeight">Current Weight:</label>
+                <input type="number" id="currentWeight" required>
+                <select id="currentUnit">
+                    <option value="kg">KG</option>
+                    <option value="lbs">lbs</option>
+                </select><br><br>
+
+                <label for="previousWeight">Previous Weight:</label>
+                <input type="number" id="previousWeight" required>
+                <select id="previousUnit">
+                    <option value="kg">KG</option>
+                    <option value="lbs">lbs</option>
+                </select><br><br>
+
+                <button type="button" onclick="calculateWeightChange()">Calculate</button>
+            </form>
+
+            <div id="result"></div>
+        </div>
+    </div>
+
+    <div id="result"></div>
+
+    <script>
+        function calculateWeightChange() {
+            var currentWeight = parseFloat(document.getElementById('currentWeight').value);
+            var currentUnit = document.getElementById('currentUnit').value;
+            var previousWeight = parseFloat(document.getElementById('previousWeight').value);
+            var previousUnit = document.getElementById('previousUnit').value;
+
+            // Convert weights to KG if the units are lbs
+            if (currentUnit === 'lbs') {
+                currentWeight *= 0.453592;
+            }
+            if (previousUnit === 'lbs') {
+                previousWeight *= 0.453592;
+            }
+
+            var weightChange = currentWeight - previousWeight;
+            var weightStatus = "";
+            if (weightChange > 0) {
+                weightStatus = "gain";
+            } else if (weightChange < 0) {
+                weightStatus = "loss";
+            } else {
+                weightStatus = "no change";
+            }
+
+            var result = document.getElementById('result');
+            result.innerHTML = "<strong>WEIGHT CHANGE:</strong> " + weightChange.toFixed(2) + " KG<br>" +
+                                "<strong>CURRENT WEIGHT:</strong> " + currentWeight.toFixed(2) + " KG<br>" +
+                                "<strong>PREVIOUS WEIGHT:</strong> " + previousWeight.toFixed(2) + " KG<br>" +
+                                "<strong>Status:</strong> " + weightStatus;
+        }
+    </script>
+
+</body></html>

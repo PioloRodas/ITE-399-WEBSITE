@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calorie Tracker</title>
+  <link rel="stylesheet" href="Css-home.css">
+</head>
+<body>
+  <div class="navbar">
+    <button class="openbtn" onclick="openNav()"> ☰ Menu </button>
+  </div>
+
+  <div id="mySidebar" class="sidebar">
+    
+    <div class="sidebar-header">
+      <img src="logo.png" alt="Logo">
+      <h3>CaloReal</h3>
+    </div>
+      <center>
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <a href="#">Dashboard</a>
+        <a href="html-date.html">Diary</a>
+        <a href="#">About Us</a>
+        <a href="#">Contact Us</a>
+      </center>
+  </div>
+
+  <div class="content-container">
+    <h2>Food Macronutrient Breakdown</h2>
+
+    <form id="foodForm">
+      <label for="foodSelect">Select a food:</label>
+      <select id="foodSelect">
+        <option value="chicken_breast">Chicken Breast</option>
+        <option value="rice">Rice</option>
+        <option value="avocado">Avocado</option>
+        <option value="banana">Banana</option>
+        <option value="salmon">Salmon</option>
+        <option value="potato">Potato</option>
+        <option value="broccoli">Broccoli</option>
+        <option value="spinach">Spinach</option>
+        <option value="apple">Apple</option>
+        <option value="oatmeal">Oatmeal</option>
+        <option value="almonds">Almonds</option>
+        <option value="egg">Egg</option>
+        <option value="cottage_cheese">Cottage Cheese</option>
+        <option value="yogurt">Yogurt</option>
+        <option value="pasta">Pasta</option>
+        <option value="beef">Beef</option>
+        <option value="peanut_butter">Peanut Butter</option>
+        <option value="orange">Orange</option>
+        <option value="bread">Bread</option>
+        <option value="tuna">Tuna</option>
+        <optgroup label="Filipino Dishes">
+          <option value="adobong_baboy">Adobong Baboy</option>
+          <option value="adobong_manok">Adobong Manok</option>
+          <option value="sinigang_na_baboy">Sinigang na Baboy</option>
+          <option value="sinigang_na_baka">Sinigang na Baka</option>
+        </optgroup>
+        <!-- Add more options as needed -->
+      </select><br><br>
+      
+      <label for="gramsInput">Enter grams:</label>
+      <input type="number" id="gramsInput" name="gramsInput" required><br><br>
+    
+      <button type="button" onclick="calculateNutrients()">Calculate Nutrients</button>
+    </form>
+    
+    <div id="result"></div>
+  </div>
+  <hr>
+
+  <div id="container">
+    <h2>Weight Change Calculator</h2>
+    <div id="calculator">
+        <form id="weightForm">
+            <label for="currentWeight">Current Weight:</label>
+            <input type="number" id="currentWeight" required>
+            <select id="currentUnit">
+                <option value="kg">KG</option>
+                <option value="lbs">lbs</option>
+            </select><br><br>
+
+            <label for="previousWeight">Previous Weight:</label>
+            <input type="number" id="previousWeight" required>
+            <select id="previousUnit">
+                <option value="kg">KG</option>
+                <option value="lbs">LBS</option>
+            </select><br><br>
+
+            <button type="button" onclick="calculateWeightChange()">Calculate</button>
+        </form>
+
+        <div id="result"></div>
+    </div>
+</div>
+
+  <script src="sidenav.html"></script>
+</body>
+</html>
